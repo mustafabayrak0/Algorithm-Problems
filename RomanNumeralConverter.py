@@ -15,7 +15,7 @@ def convert(x: str):
     elif len(x) == 1:
         return roman[x[0]]
     else:
-        return "BOŞ"
+        return ""
 
 
 user_input = input()
