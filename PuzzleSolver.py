@@ -276,7 +276,7 @@ def diagonal_search(puzzle, word, puzzle_to_modify):
     return (temp_word == word), puzzle_to_modify
 
 
-# Do not change below in any case.
+
 if __name__ == "__main__":
     puzzle = read_puzzle()
     words = read_words()
