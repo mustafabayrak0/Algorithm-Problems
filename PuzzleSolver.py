@@ -1,5 +1,3 @@
-# name surname:Mustafa Bayrak
-# school id:150210339
 def read_puzzle(): #this function reads puzzle
     result = []
     row_size, column_size = map(int, input().split())
