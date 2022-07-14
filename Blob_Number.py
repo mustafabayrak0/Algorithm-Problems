@@ -2,32 +2,15 @@
 # Id: 150210339
 
 # I numbered the blobs and then checked
-
-# finds length
-def length_function(m):
-    length = 0
-    for i in m:
-        length += 1
-    return length
-
-
-# finds min element
-def find_min(lst):
-    if length_function(lst) == 0:
-        return None
-    min_res = lst[0]
-    for i in lst:
-        if i < min_res:
-            min_res = i
-    return min_res
-
-
-# sorts list
-def sort_lst(lst):
-    for i in range(length_function(lst)):
-        for j in range(length_function(lst) - 1):
-            if lst[j] > lst[j + 1]:
-                lst[j], lst[j + 1] = lst[j + 1], lst[j]
+def around_checker(row_index, column_index, grid: list):
+    lst = []
+    try:
+        for i in [grid[row_index - 1][column_index], grid[row_index + 1][column_index],
+                  grid[row_index][column_index - 1], grid[row_index][column_index + 1]]:
+            if i != '':
+                lst.append(i)
+    except Exception as err:
+        pass
     return lst
 
 
@@ -52,150 +35,35 @@ for i in range(filled_character_number):
     filled_row, filled_column = map(int, input().split())  # take input of filled cells
     filled_list += [[filled_row, filled_column]]  # add filled ones to a list
     grid[filled_list[i][0]][filled_list[i][1]] = character  # define character
-sort_lst(filled_list)  # sort the filled list
+filled_list.sort()  # sort the filled list
 for i in grid:
     for j in i:
         print(j, end="")  # printing grid
     print("\r")
 
-for i in filled_list:
-    r, c = i[0], i[1]
+for t in filled_list:
+    i, j = t[0], t[1]
     l = []
-    # except borders
-    if 0 < r < row_number - 1 and 0 < c < column_number - 1:
-        if type(grid[r][c + 1]) is int or type(grid[r][c - 1]) is int or type(grid[r + 1][c]) is int or type(
-                grid[r - 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c + 1], grid[r][c - 1], grid[r + 1][c], grid[r - 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c + 1] == character or grid[r][c - 1] == character or grid[r + 1][c] == character or \
-                grid[r - 1][c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    #  First row excluding first column and last column
-    elif r == 0 and 0 < c < column_number - 1:
-        if type(grid[r][c + 1]) is int or type(grid[r][c - 1]) is int or type(grid[r + 1][c]) is int:
-            lst = [grid[r][c + 1], grid[r][c - 1], grid[r + 1][c]]  # check if there are numbers around
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c + 1] == character or grid[r][c - 1] == character or grid[r + 1][
-            c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    # upper left corner
-    elif r == 0 and c == 0:
-        if type(grid[r][c + 1]) is int or type(grid[r + 1][c]) is int:
-            lst = [grid[r][c + 1], grid[r + 1][c]]  # check if there are numbers around
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c + 1] == character or grid[r + 1][c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    # bottom row but excluding first and last column
-    elif r == row_number - 1 and c != 0 and c != column_number - 1:
-        if type(grid[r][c + 1]) is int or type(grid[r][c - 1]) is int or type(
-                grid[r - 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c + 1], grid[r][c - 1], grid[r - 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c + 1] == character or grid[r][c - 1] == character or grid[r - 1][
-            c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    # bottom left corner
-    elif r == row_number - 1 and c == 0:
-        if type(grid[r][c + 1]) is int or type(grid[r - 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c + 1], grid[r - 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c + 1] == character or grid[r - 1][c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    # last column but excluding first and last row
-    elif c == column_number - 1 and r != row_number - 1 and r != 0:
-        if type(grid[r][c - 1]) is int or type(grid[r + 1][c]) is int or type(
-                grid[r - 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c - 1], grid[r + 1][c], grid[r - 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c - 1] == character or grid[r + 1][c] == character or grid[r - 1][
-            c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    # top right corner
-    elif c == column_number - 1 and r == 0:
-        if type(grid[r][c - 1]) is int or type(grid[r + 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c - 1], grid[r + 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c - 1] == character or grid[r + 1][c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    # bottom right corner
-    elif c == column_number - 1 and r == row_number - 1:
-        if type(grid[r][c - 1]) is int or type(grid[r - 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c - 1], grid[r - 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c - 1] == character or grid[r - 1][c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
-    #  first column but excluding first and last row
-    elif c == 0 and r != row_number - 1 and r != 0:
-        if type(grid[r][c + 1]) is int or type(grid[r - 1][c]) is int or type(
-                grid[r + 1][c]) is int:  # check if there are numbers around
-            lst = [grid[r][c + 1], grid[r - 1][c], grid[r + 1][c]]
-            for k in lst:
-                if type(k) is int:
-                    l += [k]
-            grid[r][c] = find_min(l)  # find the smallest number around
-        elif grid[r][c + 1] == character or grid[r][c - 1] == character or grid[r + 1][
-            c] == character:  # no numbers around, only characters
-            result += 1
-            grid[r][c] = result
-        else:
-            result += 1
-            grid[r][c] = result
+    lst = around_checker(i, j, grid)
+    int_check = False
+    character_check = False
+    for k in lst:
+        if type(k) is int:
+            int_check = True
+            break
+        elif k == character:
+            character_check = True
+    if int_check:
+        for f in lst:
+            if type(f) is int:
+                l += [f]
+        grid[i][j] = min(l)
+    elif not int_check and character_check:
+        result += 1
+        grid[i][j] = result
+    else:
+        result += 1
+        grid[i][j] = result
 
 
 # In this function, it is checked whether the groups are numbered correctly.
@@ -210,8 +78,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # First row excluding first column and last column
@@ -220,8 +88,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # upper left corner
@@ -230,8 +98,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # bottom row but excluding first and last column
@@ -240,8 +108,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # bottom left corner
@@ -250,8 +118,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # last column but excluding first and last row
@@ -260,8 +128,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # top right corner
@@ -270,8 +138,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 # bottom right corner
@@ -280,8 +148,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
                 #  first column but excluding first and last row
@@ -290,8 +158,8 @@ def check_function(a, b, c, d, e, f):
                     for k in lst:
                         if type(k) is int:
                             l += [k]
-                    if length_function(l) != 0:
-                        grid[r][c] = find_min(l)  # find the smallest number around
+                    if len(l) != 0:
+                        grid[r][c] = min(l)  # find the smallest number around
                     else:
                         grid[r][c] = result
     return grid
@@ -308,5 +176,22 @@ for i in grid:
     for j in i:
         if type(j) is int:
             result_set.add(j)  # add to the set to find out how many different groups there are
-count = length_function(result_set)
+count = len(result_set)
 print(count)
+
+#Sample Input 
+# 3 11
+# *
+# 12  
+# 0 2
+# 0 3
+# 0 6
+# 0 4
+# 0 7
+# 0 8
+# 1 4
+# 1 8
+# 1 6
+# 2 6
+# 2 5
+# 2 4
